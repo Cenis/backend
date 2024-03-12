@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: registry.gitlab.com/gibz/teaching/m347/countrivia/frontend:latest
+    environment:
+      - VITE_APP_COUNTRIVIA_API_BASE_URL=http://localhost:8080
+    ports:
+      - "80:80"
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - REST_API_URL=http://url-to-rest-api
+      - BASE_URI=https://restcountries.com/v3.1
+      - alternativeAnswerCount=2
+      - alternativeAnswerCountVariance=5
+      - ConnectionStrings__CounTriviaMariaDbInDocker=Server=database;Database=mydatabase;User=myuser;Password=mypassword
+    ports:
+      - "8080:8080"
+
+  database:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=myrootpassword
+      - MYSQL_DATABASE=mydatabase
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=mypassword
